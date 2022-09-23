@@ -39,18 +39,18 @@ void run(size_t blockSize)
     {
         pair<void *, size_t> dataRecordAddr = database.writeRecord(record);
 
-        // if (++recordNum % 100 == 0)
-        // cout << recordNum << "\r";
+        recordNum++;
+        // if (recordNum % 100 == 0) cout << recordNum << "\r";
     }
     // cout << recordNum << " records \n\n";
 
     datafile.close();
 
     // For debug on small dataset
-    // if (recordNum <= 20)
-    //     bpTree->display();
+    if (recordNum <= 20)
+        bpTree->display();
     cout << "------------------------------------------\n";
-    cout << "\n>>>>> Block size " << blockSize << " <<<<<<\n";
+    cout << ">>>>> Block size " << blockSize << " <<<<<<\n";
     cout << "------------------------------------------\n";
     cout << "\n>>>>> Experiment 1 <<<<<\n";
     cout << "Number of blocks: " << memory.getNumAllocBlks() << "\n";
@@ -120,16 +120,15 @@ void run(size_t blockSize)
     cout << "Average rating = " << total_rating / (double)res.size() << endl;
 
     cout << "\n>>>>> Experiment 5 <<<<<\n";
-    auto res2 = bpTree->search(1000, 1000, false);
-    int initialCnt2 = bpTree->getBlockNum();
-    for (auto i : res2)
-    {
-        bpTree->remove(i.first);
-    }
-    int postCnt2 = bpTree->getBlockNum();
-    int nodesDel = initialCnt2 - postCnt2;
+    res.clear();
+    res = bpTree->search(1000, 1000, false);
+    int initialCnt = bpTree->getBlockNum(); 
+    for (auto [key, _] : res) bpTree->remove(key);
+    int postCnt = bpTree->getBlockNum();
+    int nodesDel = initialCnt - postCnt;
+    cout << "Number of records deleted: " << res.size() << "\n";
     cout << "Number of nodes deleted: " << nodesDel << "\n";
-    cout << "Number of nodes in updated B+ tree: " << postCnt2 << "\n";
+    cout << "Number of nodes in updated B+ tree: " << postCnt << "\n";
     cout << "Height of updated B+ tree: " << bpTree->getLevel() << "\n";
     cout << "Contents of the root node: "
          << "\n";

@@ -179,8 +179,8 @@ void BPTree::insert(keypair x, void *p)
 
     // Node is full, need to split
     keypair virtualKey[MAX_KEY + 1];
-    int i = 0, j;
     void *virtualPtr[MAX_KEY + 1];
+    int i = 0, j; 
     while (x >= cursor->key[i] && i < MAX_KEY)
         i++;
     for (j = 0; j < i; j++)
@@ -284,9 +284,9 @@ void BPTree::insertInternal(keypair x, Node *cursor, Node *child)
         newInternal->ptr[newInternal->size] = virtualPtr[MAX_KEY + 1];
 
         if (cursor == root)
-            root = new Node(false, 1, cursor->key[cursor->size], cursor, newInternal);
+            root = new Node(false, 1, virtualKey[cursor->size], cursor, newInternal);
         else
-            insertInternal(cursor->key[cursor->size], findParent(root, cursor), newInternal);
+            insertInternal(virtualKey[cursor->size], findParent(root, cursor), newInternal);
     }
 }
 
