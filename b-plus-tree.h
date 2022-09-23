@@ -3,10 +3,10 @@
 #include <iostream>
 #include <vector>
 
-#ifdef DEBUG 
+#ifdef DEBUG
 #define D(x) cerr << x
 #define Dn(x) cerr << x << '\n'
-#else 
+#else
 #define D(x)
 #define Dn(x)
 #endif
@@ -15,9 +15,9 @@ using namespace std;
 
 using uchar = unsigned char;
 using uint = unsigned int;
-using keypair = pair<int, string>; 
+using keypair = pair<int, string>;
 
-const int MAX_KEY = 3;
+const int MAX_KEY = 30;
 
 class BPTree;
 
@@ -26,7 +26,7 @@ struct Node
 public:
     bool isLeaf;
     int size;
-    keypair* key; // <key, id>
+    keypair *key; // <key, id>
     void **ptr;
 
     Node();
@@ -60,7 +60,7 @@ public:
 
     ~BPTree();
 
-    vector<pair<keypair, void *> > search(int x, int y);
+    vector<pair<keypair, void *>> search(int x, int y);
 
     void insert(keypair x, void *p);
 
@@ -72,7 +72,8 @@ public:
 
     int getLevel();
 
-    Node *getRoot() {
+    Node *getRoot()
+    {
         return root;
     };
 };

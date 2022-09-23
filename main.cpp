@@ -13,26 +13,30 @@ int main()
 {
 
     cout << "Reading data file...\n";
-    freopen("./data/data_short.tsv", "r", stdin);
-    // freopen("./data/data.tsv", "r", stdin);
+    // freopen("./data/data_short.tsv", "r", stdin);
+    freopen("./data/data.tsv", "r", stdin);
 
     Memory memory{100 MB, 100};
     Database database{memory};
-    BPTree * bpTree = database.getBPTree();
+    BPTree *bpTree = database.getBPTree();
 
     string temp;
     cin >> temp >> temp >> temp; // Ignoring the first line (column names)
     Record record;
     int recordNum = 0;
-    while (cin >> record.tconst >> record.averageRating >> record.numVotes){
+    while (cin >> record.tconst >> record.averageRating >> record.numVotes)
+    {
         pair<void *, size_t> dataRecordAddr = database.writeRecord(record);
 
-        if(++recordNum % 100 == 0) cout << recordNum << "\r"; 
+        if (++recordNum % 100 == 0)
+            cout << recordNum << "\r";
     }
     cout << recordNum << "\n\n";
 
     // For debug on small dataset
-    if(recordNum <= 20) bpTree->display(); cout << "\n";
+    if (recordNum <= 20)
+        bpTree->display();
+    cout << "\n";
 
     cout << "\n>>>>> Experiment 1 <<<<<\n";
     cout << "Number of blocks: " << memory.getNumAllocBlks() << "\n";
@@ -48,8 +52,29 @@ int main()
     ((Node *)bpTree->getRoot()->ptr[0])->display();
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
-    auto res = bpTree->search(500, 500); 
-    
+    auto res = bpTree->search(500, 500);
+    cout << "Total ";
 
+    cout << "\n>>>>> Experiment 4 <<<<<\n";
+    // auto res = bpTree->search(30000, 40000);
+
+    cout << "\n>>>>> Experiment 5 <<<<<\n";
+    auto res1 = bpTree->search(1000, 1000);
+    int initialCnt = bpTree->getBlockNum();
+    for (auto i : res1)
+    {
+        bpTree->remove(i.first);
+    }
+    int postCnt = bpTree->getBlockNum();
+    int nodesDel = initialCnt - postCnt;
+    cout << "Number of nodes deleted: " << nodesDel << "\n";
+    cout << "Number of nodes in updated B+ tree: " << postCnt << "\n";
+    cout << "Height of updated B+ tree: " << bpTree->getLevel() << "\n";
+    cout << "Contents of the root node: "
+         << "\n";
+    bpTree->getRoot()->display();
+    cout << "Contents of 1st Child Node: "
+         << "\n";
+    ((Node *)bpTree->getRoot()->ptr[0])->display();
     return 0;
 }
