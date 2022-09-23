@@ -33,8 +33,9 @@ void Node::display()
 {
     cout << "Address = " << (void *)this << "\n";
     for (int i = 0; i < size; i++)
-        cout << key[i].first << "," << key[i].second << " ";
-    cout << "(" << ptr[size] << ")\n";
+        cout << key[i].first << " ";
+    cout << "\n";
+    // cout << "(" << ptr[size] << ")\n";
 }
 
 BPTree::BPTree(size_t blkSize) : root{nullptr}

@@ -39,16 +39,16 @@ void run(size_t blockSize)
     {
         pair<void *, size_t> dataRecordAddr = database.writeRecord(record);
 
-        if (++recordNum % 100 == 0)
-            cout << recordNum << "\r";
+        // if (++recordNum % 100 == 0)
+        // cout << recordNum << "\r";
     }
-    cout << recordNum << " records \n\n";
+    // cout << recordNum << " records \n\n";
 
     datafile.close();
 
     // For debug on small dataset
-    if (recordNum <= 20)
-        bpTree->display();
+    // if (recordNum <= 20)
+    //     bpTree->display();
     cout << "------------------------------------------\n";
     cout << "\n>>>>> Block size " << blockSize << " <<<<<<\n";
     cout << "------------------------------------------\n";
@@ -65,7 +65,8 @@ void run(size_t blockSize)
     cout << "----First Child Node----\n";
     if (!bpTree->getRoot()->isLeaf)
         ((Node *)bpTree->getRoot()->ptr[0])->display();
-    else cout << "(Not exists)\n";
+    else
+        cout << "(Not exists)\n";
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
     auto res = bpTree->search(500, 500, true);
@@ -79,8 +80,10 @@ void run(size_t blockSize)
         {
             blkAddrs.insert(blkAddr);
             if (displayed_count < 5)
+            {
                 cout << "Data block " << ++displayed_count << "\n";
-            database.displayBlock(blkAddr);
+                database.displayBlock(blkAddr);
+            }
         }
         Record record;
         database.readRecord(ptr, record);
@@ -103,8 +106,10 @@ void run(size_t blockSize)
         {
             blkAddrs.insert(blkAddr);
             if (displayed_count < 5)
+            {
                 cout << "Data block " << ++displayed_count << "\n";
-            database.displayBlock(blkAddr);
+                database.displayBlock(blkAddr);
+            }
         }
         Record record;
         database.readRecord(ptr, record);
@@ -133,6 +138,6 @@ void run(size_t blockSize)
          << "\n";
     if (!bpTree->getRoot()->isLeaf)
         ((Node *)bpTree->getRoot()->ptr[0])->display();
-    else cout << "(Not exists)\n";
-
+    else
+        cout << "(Not exists)\n";
 }
