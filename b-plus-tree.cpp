@@ -1,6 +1,8 @@
 #include "b-plus-tree.h"
 #include <iostream>
 
+#define MAX_DISPLAY 5
+
 using namespace std;
 
 using keypair = pair<int, string>; 
@@ -32,16 +34,30 @@ void Node::display(){
 
 BPTree::BPTree() : root{nullptr} {}
 
-vector<keypair> BPTree::search(int x, int y, int displayCount = 0){
+vector<keypair> BPTree::search(int x, int y){
+    int displayed_count = 0;
+
     vector<keypair> ret;
     if(!root) return ret;
 
     keypair target{x, ""};
     Node *cursor = root;
     while(!cursor->isLeaf){
+        // For experiment 3 and 4
+        if(displayed_count < MAX_DISPLAY){
+            cout << "Index block " << ++displayed_count << ":\n";
+            cursor->display();
+        }
+
         int i = 0;
         while (target >= cursor->key[i] && i < cursor->size) i++;
         cursor = (Node *)cursor->ptr[i];
+    }
+
+     // For experiment 3 and 4
+    if(displayed_count < MAX_DISPLAY){
+        cout << "Index block " << ++displayed_count << ":\n";
+        cursor->display();
     }
 
     // Case 1: The first (>=x, "...") in this current leaf
@@ -51,6 +67,13 @@ vector<keypair> BPTree::search(int x, int y, int displayCount = 0){
     // Case 2: The first (>=x, "...") is the first key of next leaf
     if(i == cursor->size){
         cursor = (Node *)cursor->ptr[cursor->size];
+
+        // For experiment 3 and 4
+        if(displayed_count < MAX_DISPLAY){
+            cout << "Index block " << ++displayed_count << ":\n";
+            cursor->display();
+        }
+
         if(cursor->key[0].first >= x) i = 0;
         else return ret;
     }

@@ -11,7 +11,7 @@ Memory::Memory(size_t memSize, size_t blkSize) {
     this->memSize = memSize;
     this->blkSize = blkSize;
 
-    this->memPtr = new uchar[memSize]; // allocate memPoolSize uchars and store it in memPoolPtr and initialize it to NULL.
+    this->memPtr = new uchar[memSize];
     memset(memPtr, 0, memSize);
 
     this->numAllocBlks = 0;
@@ -70,7 +70,6 @@ pair<uchar *, size_t> Memory::getBlkAddrAndOffset(uchar *addr){
  * Destructor
  */
 Memory::~Memory() {
-    // safe deletion of pointers involves using the delete operator and then initialising it to NULL, to allow for future reference
     delete memPtr;
     memPtr = nullptr;
 }

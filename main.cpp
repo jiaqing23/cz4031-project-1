@@ -48,8 +48,7 @@ int main()
     ((Node *)bpTree->getRoot()->ptr[0])->display();
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
-    auto res = bpTree->search(500, 500, 5);
-    cout << "Total ";
+    auto res = bpTree->search(500, 500); 
 
     return 0;
 }
