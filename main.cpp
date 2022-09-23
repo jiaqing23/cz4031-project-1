@@ -67,6 +67,28 @@ int main()
     }
     cout << "Total number of data blocks accessed = " << blkAddrs.size() << "\n";
     cout << "Average rating = " << total_rating / (double) res.size() << endl;
+
+
+    cout << "\n>>>>> Experiment 3 <<<<<\n";
+    res.clear();
+    res = bpTree->search(30000, 40000);
+    blkAddrs.clear();
+    double total_rating = 0;
+    int displayed_count = 0;
+    for(auto [key, ptr]: res){
+        auto [blkAddr, _] = memory.getBlkAddrAndOffset((uchar *)ptr);
+        if(blkAddrs.count(blkAddr) == 0){
+            blkAddrs.insert(blkAddr);
+            if(displayed_count < 5) cout << "Data block " << ++displayed_count << "\n";
+            database.displayBlock(blkAddr);
+        }
+        Record record;
+        database.readRecord(ptr, record);
+        
+        total_rating += record.averageRating;
+    }
+    cout << "Total number of data blocks accessed = " << blkAddrs.size() << "\n";
+    cout << "Average rating = " << total_rating / (double) res.size() << endl;
     
 
     return 0;
