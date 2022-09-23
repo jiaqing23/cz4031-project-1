@@ -5,7 +5,8 @@ using uchar = unsigned char;
 
 using namespace std;
 
-void Record::display() {
+void Record::display()
+{
     cout << tconst << " " << averageRating << " " << numVotes << endl;
 }
 
@@ -25,13 +26,14 @@ pair<void *, size_t> Database::writeRecord(Record &record)
     {
         auto [blkAddr, _] = memory.allocBlk();
 
-        if (!blkAddr) return {nullptr, 0};
+        if (!blkAddr)
+            return {nullptr, 0};
 
         this->freeBlkPtr = (uchar *)blkAddr;
         this->freeBlkOffset = 0;
     }
 
-    memory.write((uchar*)freeBlkPtr, freeBlkOffset, &record, recordSize);
+    memory.write((uchar *)freeBlkPtr, freeBlkOffset, &record, recordSize);
     pair<void *, size_t> recordAddr{freeBlkPtr, freeBlkOffset};
 
     bpTree->insert({record.numVotes, record.tconst}, freeBlkPtr + freeBlkOffset);
@@ -41,49 +43,60 @@ pair<void *, size_t> Database::writeRecord(Record &record)
     return recordAddr;
 }
 
-void Database::readRecord(void * addr, Record &record){
+void Database::readRecord(void *addr, Record &record)
+{
     auto [blkAddr, offset] = memory.getBlkAddrAndOffset((uchar *)addr);
     char block[blkSize];
     memory.read(blkAddr, block);
-    memcpy(&record, block+offset, sizeof(record));
+    memcpy(&record, block + offset, sizeof(record));
 }
 
-void Database::deleteRecord(void * addr){
+void Database::deleteRecord(void *addr)
+{
     auto [blkAddr, offset] = memory.getBlkAddrAndOffset((uchar *)addr);
-    if(offset % sizeof(Record) != 0) throw "Invalid record address";
-    
+    if (offset % sizeof(Record) != 0)
+        throw "Invalid record address";
+
     char block[blkSize];
     memory.read(blkAddr, block);
-    
+
     char emptyRecord[sizeof(Record)];
-    memset (emptyRecord, 0, sizeof(Record));
+    memset(emptyRecord, 0, sizeof(Record));
     memory.write(blkAddr, offset, emptyRecord, sizeof(Record));
 
     // Check if a block is fully empty
     char emptyBlock[blkSize];
-    memset (emptyBlock, 0, blkSize);
-    if (!memcmp (emptyBlock, blkAddr, blkSize)) memory.deallocBlk((uchar *)blkAddr);
+    memset(emptyBlock, 0, blkSize);
+    if (!memcmp(emptyBlock, blkAddr, blkSize))
+        memory.deallocBlk((uchar *)blkAddr);
 }
 
-void Database::displayBlock(void * addr){
+void Database::displayBlock(void *addr)
+{
     auto [blkAddr, _] = memory.getBlkAddrAndOffset((uchar *)addr);
     char block[blkSize];
     memory.read(blkAddr, block);
 
     char emptyRecord[sizeof(Record)];
-    memset (emptyRecord, 0, sizeof(Record));
+    memset(emptyRecord, 0, sizeof(Record));
 
     int offset = 0;
-    while(offset < blkSize){
+    while (offset < blkSize)
+    {
         // Check if a record is deleted (empty)
-        if (!memcmp (emptyRecord, block+offset, sizeof(Record))) { offset += sizeof(Record); continue; }
+        if (!memcmp(emptyRecord, block + offset, sizeof(Record)))
+        {
+            offset += sizeof(Record);
+            continue;
+        }
 
         Record record;
-        memcpy(&record, block+offset, sizeof(record));
-        record.display();
+        memcpy(&record, block + offset, sizeof(record));
+        cout << record.tconst << " ";
 
         offset += sizeof(Record);
     }
+    cout << "\n";
 }
 
 /**
