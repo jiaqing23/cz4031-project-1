@@ -26,7 +26,7 @@ void run(size_t blockSize)
     Database database{memory};
     BPTree *bpTree = database.getBPTree();
 
-    cout << "Reading data file...\n";
+    cout << "\nReading data file...\n";
 
     ifstream datafile("./data/data_short.tsv");
     // freopen("./data/data.tsv", "r", stdin);
@@ -42,7 +42,7 @@ void run(size_t blockSize)
         if (++recordNum % 100 == 0)
             cout << recordNum << "\r";
     }
-    cout << recordNum << "\n\n";
+    cout << recordNum << " records \n\n";
 
     datafile.close();
 
@@ -65,6 +65,7 @@ void run(size_t blockSize)
     cout << "----First Child Node----\n";
     if (!bpTree->getRoot()->isLeaf)
         ((Node *)bpTree->getRoot()->ptr[0])->display();
+    else cout << "(Not exists)\n";
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
     auto res = bpTree->search(500, 500, true);
@@ -132,4 +133,6 @@ void run(size_t blockSize)
          << "\n";
     if (!bpTree->getRoot()->isLeaf)
         ((Node *)bpTree->getRoot()->ptr[0])->display();
+    else cout << "(Not exists)\n";
+
 }

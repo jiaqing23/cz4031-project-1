@@ -76,7 +76,7 @@ void Database::displayBlock(void * addr){
     int offset = 0;
     while(offset < blkSize){
         // Check if a record is deleted (empty)
-        if (!memcmp (emptyRecord, block+offset, sizeof(Record))) continue;
+        if (!memcmp (emptyRecord, block+offset, sizeof(Record))) { offset += sizeof(Record); continue; }
 
         Record record;
         memcpy(&record, block+offset, sizeof(record));
