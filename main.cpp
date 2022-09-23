@@ -14,8 +14,8 @@ int main()
 {
 
     cout << "Reading data file...\n";
-    //freopen("./data/data_short.tsv", "r", stdin);
-    freopen("./data/data.tsv", "r", stdin);
+    freopen("./data/data_short.tsv", "r", stdin);
+    // freopen("./data/data.tsv", "r", stdin);
 
     Memory memory{100 MB, 100};
     Database database{memory};
@@ -46,7 +46,7 @@ int main()
     cout << "----Root Node----\n";
     bpTree->getRoot()->display();
     cout << "----First Child Node----\n";
-    ((Node *)bpTree->getRoot()->ptr[0])->display();
+    if(!bpTree->getRoot()->isLeaf) ((Node *)bpTree->getRoot()->ptr[0])->display();
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
     auto res = bpTree->search(500, 500);
@@ -89,7 +89,6 @@ int main()
     }
     cout << "Total number of data blocks accessed = " << blkAddrs.size() << "\n";
     cout << "Average rating = " << total_rating / (double) res.size() << endl;
-    
 
     return 0;
 }
