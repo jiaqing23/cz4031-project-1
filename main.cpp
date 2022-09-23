@@ -13,8 +13,8 @@ int main()
 {
 
     cout << "Reading data file...\n";
-    freopen("/workspaces/cz4031-temp/data/data_short.tsv", "r", stdin);
-    // freopen("/workspaces/cz4031-temp/data/data.tsv", "r", stdin);
+    freopen("./data/data_short.tsv", "r", stdin);
+    // freopen("./data/data.tsv", "r", stdin);
 
     Memory memory{100 MB, 100};
     Database database{memory};
@@ -49,7 +49,7 @@ int main()
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
     auto res = bpTree->search(500, 500, 5);
-    cout << "Total "
+    cout << "Total ";
 
     return 0;
 }
