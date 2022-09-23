@@ -1,7 +1,8 @@
 #include <iostream>
+#include <set>
 
 #include "memory.h"
-#include "database.h"
+#include "database.h" 
 
 #define MB *1'000'000
 
@@ -48,7 +49,24 @@ int main()
     ((Node *)bpTree->getRoot()->ptr[0])->display();
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
-    auto res = bpTree->search(500, 500); 
+    auto res = bpTree->search(500, 500);
+    set<void *> blkAddrs;
+    double total_rating = 0;
+    int displayed_count = 0;
+    for(auto [key, ptr]: res){
+        auto [blkAddr, _] = memory.getBlkAddrAndOffset((uchar *)ptr);
+        if(blkAddrs.count(blkAddr) == 0){
+            blkAddrs.insert(blkAddr);
+            if(displayed_count < 5) cout << "Data block " << ++displayed_count << "\n";
+            database.displayBlock(blkAddr);
+        }
+        Record record;
+        database.readRecord(ptr, record);
+        
+        total_rating += record.averageRating;
+    }
+    cout << "Total number of data blocks accessed = " << blkAddrs.size() << "\n";
+    cout << "Average rating = " << total_rating / (double) res.size() << endl;
     
 
     return 0;

@@ -50,6 +50,8 @@ public:
 
     void deleteRecord(void * addr);
 
+    void displayBlock(void * addr);
+
     BPTree *getBPTree() {
         return bpTree;
     }
