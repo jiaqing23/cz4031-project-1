@@ -69,7 +69,7 @@ int main()
     cout << "Average rating = " << total_rating / (double) res.size() << endl;
 
 
-    cout << "\n>>>>> Experiment 3 <<<<<\n";
+    cout << "\n>>>>> Experiment 4 <<<<<\n";
     res.clear();
     res = bpTree->search(30000, 40000);
     blkAddrs.clear();

@@ -17,7 +17,7 @@ using uchar = unsigned char;
 using uint = unsigned int;
 using keypair = pair<int, string>; 
 
-const int MAX_KEY = 3;
+const int MAX_KEY = 20;
 
 class BPTree;
 
