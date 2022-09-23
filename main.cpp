@@ -73,8 +73,8 @@ int main()
     res.clear();
     res = bpTree->search(30000, 40000);
     blkAddrs.clear();
-    double total_rating = 0;
-    int displayed_count = 0;
+    total_rating = 0;
+    displayed_count = 0;
     for(auto [key, ptr]: res){
         auto [blkAddr, _] = memory.getBlkAddrAndOffset((uchar *)ptr);
         if(blkAddrs.count(blkAddr) == 0){
