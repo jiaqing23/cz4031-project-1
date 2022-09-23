@@ -37,7 +37,7 @@ void Node::display()
 
 BPTree::BPTree() : root{nullptr} {}
 
-vector<pair<keypair, void *>> BPTree::search(int x, int y)
+vector<pair<keypair, void *>> BPTree::search(int x, int y, bool exp3and4)
 {
     int displayed_count = 0;
     int accessed_count = 0;
@@ -54,10 +54,10 @@ vector<pair<keypair, void *>> BPTree::search(int x, int y)
     while (!cursor->isLeaf)
     {
         // For experiment 3 and 4
-        if (displayed_count < MAX_DISPLAY)
+        if (displayed_count < MAX_DISPLAY && exp3and4)
         {
             cout << "Index block " << ++displayed_count << ":\n";
-            // cursor->display();
+            cursor->display();
         }
         accessed_count++;
 
@@ -68,10 +68,10 @@ vector<pair<keypair, void *>> BPTree::search(int x, int y)
     }
 
     // For experiment 3 and 4
-    if (displayed_count < MAX_DISPLAY)
+    if (displayed_count < MAX_DISPLAY && exp3and4)
     {
         cout << "Index block " << ++displayed_count << ":\n";
-        // cursor->display();
+        cursor->display();
     }
     accessed_count++;
 
@@ -87,10 +87,10 @@ vector<pair<keypair, void *>> BPTree::search(int x, int y)
         cursor = (Node *)cursor->ptr[cursor->size];
 
         // For experiment 3 and 4
-        if (displayed_count < MAX_DISPLAY)
+        if (displayed_count < MAX_DISPLAY && exp3and4)
         {
-            // cout << "Index block " << ++displayed_count << ":\n";
-            // cursor->display();
+            cout << "Index block " << ++displayed_count << ":\n";
+            cursor->display();
         }
         accessed_count++;
 
@@ -98,7 +98,7 @@ vector<pair<keypair, void *>> BPTree::search(int x, int y)
             i = 0;
         else
         {
-            // cout << "Total number of index nodes accessed = " << accessed_count << "\n";
+            cout << "Total number of index nodes accessed = " << accessed_count << "\n";
             return ret;
         }
     }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 
 #include "memory.h"
 #include "database.h"
@@ -13,8 +14,8 @@ int main()
 {
 
     cout << "Reading data file...\n";
-    // freopen("./data/data_short.tsv", "r", stdin);
-    freopen("./data/data.tsv", "r", stdin);
+    freopen("./data/data_short.tsv", "r", stdin);
+    // freopen("./data/data.tsv", "r", stdin);
 
     Memory memory{100 MB, 100};
     Database database{memory};
@@ -52,14 +53,57 @@ int main()
     ((Node *)bpTree->getRoot()->ptr[0])->display();
 
     cout << "\n>>>>> Experiment 3 <<<<<\n";
-    auto res = bpTree->search(500, 500);
-    cout << "Total ";
+    auto res = bpTree->search(500, 500, true);
+    set<void *> blkAddrs;
+    double total_rating = 0;
+    int displayed_count = 0;
+    for (auto [key, ptr] : res)
+    {
+        auto [blkAddr, _] = memory.getBlkAddrAndOffset((uchar *)ptr);
+        if (blkAddrs.count(blkAddr) == 0)
+        {
+            blkAddrs.insert(blkAddr);
+            if (displayed_count < 5)
+                cout << "Data block " << ++displayed_count << "\n";
+            database.displayBlock(blkAddr);
+        }
+        Record record;
+        database.readRecord(ptr, record);
+
+        total_rating += record.averageRating;
+    }
+    cout << "Total number of data blocks accessed = " << blkAddrs.size() << "\n";
+    cout << "Average rating = " << total_rating / (double)res.size() << endl;
+
+    cout << "\n>>>>> Experiment 4 <<<<<\n";
+    res.clear();
+    res = bpTree->search(30000, 40000, true);
+    blkAddrs.clear();
+    total_rating = 0;
+    displayed_count = 0;
+    for (auto [key, ptr] : res)
+    {
+        auto [blkAddr, _] = memory.getBlkAddrAndOffset((uchar *)ptr);
+        if (blkAddrs.count(blkAddr) == 0)
+        {
+            blkAddrs.insert(blkAddr);
+            if (displayed_count < 5)
+                cout << "Data block " << ++displayed_count << "\n";
+            database.displayBlock(blkAddr);
+        }
+        Record record;
+        database.readRecord(ptr, record);
+
+        total_rating += record.averageRating;
+    }
+    cout << "Total number of data blocks accessed = " << blkAddrs.size() << "\n";
+    cout << "Average rating = " << total_rating / (double)res.size() << endl;
 
     cout << "\n>>>>> Experiment 4 <<<<<\n";
     // auto res = bpTree->search(30000, 40000);
 
     cout << "\n>>>>> Experiment 5 <<<<<\n";
-    auto res1 = bpTree->search(1000, 1000);
+    auto res1 = bpTree->search(1000, 1000, false);
     int initialCnt = bpTree->getBlockNum();
     for (auto i : res1)
     {

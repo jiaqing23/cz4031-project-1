@@ -65,6 +65,27 @@ void Database::deleteRecord(void * addr){
     if (!memcmp (emptyBlock, blkAddr, blkSize)) memory.deallocBlk((uchar *)blkAddr);
 }
 
+void Database::displayBlock(void * addr){
+    auto [blkAddr, _] = memory.getBlkAddrAndOffset((uchar *)addr);
+    char block[blkSize];
+    memory.read(blkAddr, block);
+
+    char emptyRecord[sizeof(Record)];
+    memset (emptyRecord, 0, sizeof(Record));
+
+    int offset = 0;
+    while(offset < blkSize){
+        // Check if a record is deleted (empty)
+        if (!memcmp (emptyRecord, block+offset, sizeof(Record))) continue;
+
+        Record record;
+        memcpy(&record, block+offset, sizeof(record));
+        record.display();
+
+        offset += sizeof(Record);
+    }
+}
+
 /**
  * Destructor
  */
