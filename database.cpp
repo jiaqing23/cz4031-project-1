@@ -15,7 +15,7 @@ Database::Database(Memory &memory) : memory{memory},
                                      freeBlkOffset{0},
                                      freeBlkPtr{nullptr}
 {
-    this->bpTree = new BPTree;
+    this->bpTree = new BPTree(memory.getBlkSize());
 }
 
 pair<void *, size_t> Database::writeRecord(Record &record)

@@ -7,6 +7,8 @@ using namespace std;
 
 using keypair = pair<int, string>;
 
+int BPTree::MAX_KEY = 10;
+
 Node::Node() : Node(false, 0, {}, nullptr, nullptr) {}
 
 Node::Node(bool isLeaf, int size) : Node(isLeaf, size, {}, nullptr, nullptr) {}
@@ -14,8 +16,8 @@ Node::Node(bool isLeaf, int size) : Node(isLeaf, size, {}, nullptr, nullptr) {}
 Node::Node(bool isLeaf, int size, keypair firstKey, void *firstPtr, void *secondPtr) : isLeaf{isLeaf},
                                                                                        size{size}
 {
-    key = new keypair[MAX_KEY];
-    ptr = new void *[MAX_KEY + 1];
+    key = new keypair[BPTree::MAX_KEY];
+    ptr = new void *[BPTree::MAX_KEY + 1];
     key[0] = firstKey;
     ptr[0] = firstPtr;
     ptr[1] = secondPtr;
@@ -35,7 +37,10 @@ void Node::display()
     cout << "(" << ptr[size] << ")\n";
 }
 
-BPTree::BPTree() : root{nullptr} {}
+BPTree::BPTree(size_t blkSize) : root{nullptr}
+{
+    MAX_KEY = (blkSize - sizeof(Node::isLeaf) - sizeof(Node::size) - sizeof(void *)) / (sizeof(int) + 10 + sizeof(void *));
+}
 
 vector<pair<keypair, void *>> BPTree::search(int x, int y, bool exp3and4)
 {

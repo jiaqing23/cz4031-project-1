@@ -28,8 +28,8 @@ void run(size_t blockSize)
 
     cout << "\nReading data file...\n";
 
-    ifstream datafile("./data/data_short.tsv");
-    // freopen("./data/data.tsv", "r", stdin);
+    // ifstream datafile("./data/data_short.tsv");
+    ifstream datafile("./data/data.tsv"); 
 
     string temp;
     datafile >> temp >> temp >> temp; // Ignoring the first line (column names)
@@ -57,7 +57,7 @@ void run(size_t blockSize)
     cout << "Total size: " << memory.getNumAllocBlks() * memory.getBlkSize() * 1.0 / (1 MB) << " MB\n";
 
     cout << "\n>>>>> Experiment 2 <<<<<\n";
-    cout << "Parameter n: " << MAX_KEY << "\n";
+    cout << "Parameter n: " << BPTree::MAX_KEY << "\n";
     cout << "Number of nodes: " << bpTree->getBlockNum() << "\n";
     cout << "Number of levels: " << bpTree->getLevel() << "\n";
     cout << "----Root Node----\n";

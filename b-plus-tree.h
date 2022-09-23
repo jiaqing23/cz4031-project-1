@@ -17,8 +17,6 @@ using uchar = unsigned char;
 using uint = unsigned int;
 using keypair = pair<int, string>;
 
-const int MAX_KEY = 30;
-
 class BPTree;
 
 struct Node
@@ -56,7 +54,9 @@ private:
     Node *findParent(Node *cursor, Node *child);
 
 public:
-    BPTree();
+    static int MAX_KEY;
+
+    BPTree(size_t blkSize);
 
     ~BPTree();
 
