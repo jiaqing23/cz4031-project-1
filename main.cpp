@@ -14,8 +14,8 @@ int main()
 {
 
     cout << "Reading data file...\n";
-    freopen("./data/data_short.tsv", "r", stdin);
-    // freopen("./data/data.tsv", "r", stdin);
+    //freopen("./data/data_short.tsv", "r", stdin);
+    freopen("./data/data.tsv", "r", stdin);
 
     Memory memory{100 MB, 100};
     Database database{memory};
