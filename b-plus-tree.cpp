@@ -34,20 +34,25 @@ void Node::display(){
 
 BPTree::BPTree() : root{nullptr} {}
 
-vector<keypair> BPTree::search(int x, int y){
+vector<pair<keypair, void *> > BPTree::search(int x, int y){
     int displayed_count = 0;
+    int accessed_count = 0;
 
-    vector<keypair> ret;
-    if(!root) return ret;
+    vector<pair<keypair, void *> > ret;
+    if(!root){
+        cout << "Total number of index nodes accessed = 0\n";   
+        return ret;
+    }
 
     keypair target{x, ""};
-    Node *cursor = root;
+    Node *cursor = root; 
     while(!cursor->isLeaf){
         // For experiment 3 and 4
         if(displayed_count < MAX_DISPLAY){
             cout << "Index block " << ++displayed_count << ":\n";
             cursor->display();
         }
+        accessed_count++;
 
         int i = 0;
         while (target >= cursor->key[i] && i < cursor->size) i++;
@@ -59,6 +64,7 @@ vector<keypair> BPTree::search(int x, int y){
         cout << "Index block " << ++displayed_count << ":\n";
         cursor->display();
     }
+    accessed_count++;
 
     // Case 1: The first (>=x, "...") in this current leaf
     int i;
@@ -73,23 +79,35 @@ vector<keypair> BPTree::search(int x, int y){
             cout << "Index block " << ++displayed_count << ":\n";
             cursor->display();
         }
+        accessed_count++;
 
         if(cursor->key[0].first >= x) i = 0;
-        else return ret;
+        else {
+            cout << "Total number of index nodes accessed = " << accessed_count << "\n";   
+            return ret;
+        }
     }
    
     while(cursor->key[i].first <= y){
-        ret.emplace_back(cursor->key[i]);
+        ret.emplace_back(cursor->key[i], cursor->ptr[i]);
         i++;
         if(i == cursor->size){
             if(cursor->ptr[i]){
                 cursor = (Node *)cursor->ptr[cursor->size];
                 i = 0;
+
+                // For experiment 3 and 4
+                if(displayed_count < MAX_DISPLAY){
+                    cout << "Index block " << ++displayed_count << ":\n";
+                    cursor->display();
+                }
+                accessed_count++;
             }
             else break;
         }
     }
     
+    cout << "Total number of index nodes accessed = " << accessed_count << "\n";
     return ret;
 }
 

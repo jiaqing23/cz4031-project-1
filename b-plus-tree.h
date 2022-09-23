@@ -60,7 +60,7 @@ public:
 
     ~BPTree();
 
-    vector<keypair> search(int x, int y);
+    vector<pair<keypair, void *> > search(int x, int y);
 
     void insert(keypair x, void *p);
 
