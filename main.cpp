@@ -27,8 +27,7 @@ void run(size_t blockSize)
     BPTree *bpTree = database.getBPTree();
 
     cout << "\nReading data file...\n";
-
-    // ifstream datafile("./data/data_short.tsv");
+ 
     ifstream datafile("./data/data.tsv"); 
 
     string temp;
@@ -123,7 +122,10 @@ void run(size_t blockSize)
     res.clear();
     res = bpTree->search(1000, 1000, false);
     int initialCnt = bpTree->getBlockNum(); 
-    for (auto [key, _] : res) bpTree->remove(key);
+    for (auto [key, addr] : res){
+        bpTree->remove(key);
+        database.deleteRecord(addr);
+    }
     int postCnt = bpTree->getBlockNum();
     int nodesDel = initialCnt - postCnt;
     cout << "Number of records deleted: " << res.size() << "\n";

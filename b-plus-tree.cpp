@@ -68,7 +68,7 @@ vector<pair<keypair, void *>> BPTree::search(int x, int y, bool exp3and4)
         accessed_count++;
 
         int i = 0;
-        while (target >= cursor->key[i] && i < cursor->size)
+        while (i < cursor->size && target >= cursor->key[i] )
             i++;
         cursor = (Node *)cursor->ptr[i];
     }
@@ -152,7 +152,7 @@ void BPTree::insert(keypair x, void *p)
     while (!cursor->isLeaf)
     {
         int i = 0;
-        while (x >= cursor->key[i] && i < cursor->size)
+        while (i < cursor->size && x >= cursor->key[i])
             i++;
         parent = cursor;
         cursor = (Node *)cursor->ptr[i];
@@ -162,7 +162,7 @@ void BPTree::insert(keypair x, void *p)
     if (cursor->size < MAX_KEY)
     {
         int i = 0;
-        while (x >= cursor->key[i] && i < cursor->size)
+        while (i < cursor->size && x >= cursor->key[i])
             i++;
 
         cursor->ptr[cursor->size + 1] = cursor->ptr[cursor->size];
@@ -181,7 +181,7 @@ void BPTree::insert(keypair x, void *p)
     keypair virtualKey[MAX_KEY + 1];
     void *virtualPtr[MAX_KEY + 1];
     int i = 0, j; 
-    while (x >= cursor->key[i] && i < MAX_KEY)
+    while (i < MAX_KEY && x >= cursor->key[i])
         i++;
     for (j = 0; j < i; j++)
     {
@@ -224,7 +224,7 @@ void BPTree::insertInternal(keypair x, Node *cursor, Node *child)
     if (cursor->size < MAX_KEY)
     {
         int i = 0;
-        while (x >= cursor->key[i] && i < cursor->size)
+        while (i < cursor->size && x >= cursor->key[i])
             i++;
         for (int j = cursor->size; j > i; j--)
         {
@@ -244,7 +244,7 @@ void BPTree::insertInternal(keypair x, Node *cursor, Node *child)
         Node *virtualPtr[MAX_KEY + 2];
 
         int i = 0, j;
-        while (x >= cursor->key[i] && i < MAX_KEY)
+        while (i < MAX_KEY && x >= cursor->key[i])
             i++;
 
         for (j = 0; j < i; j++)
@@ -328,7 +328,7 @@ void BPTree::remove(keypair x)
     while (!cursor->isLeaf)
     {
         int i = 0;
-        while (x >= cursor->key[i] && i < cursor->size)
+        while (i < cursor->size && x >= cursor->key[i])
             i++;
         parent = cursor;
         cursor = (Node *)cursor->ptr[i];
@@ -338,7 +338,7 @@ void BPTree::remove(keypair x)
 
     bool found = false;
     int pos = 0;
-    while (x > cursor->key[pos] && pos < cursor->size)
+    while (pos < cursor->size && x > cursor->key[pos])
         pos++;
     if (pos == cursor->size || cursor->key[pos] != x)
     {
@@ -458,16 +458,16 @@ void BPTree::removeInternal(keypair x, Node *cursor, Node *child)
     }
 
     int pos = 0;
-    while (cursor->key[pos] != x && pos < cursor->size)
+    while (pos < cursor->size && cursor->key[pos] != x)
         pos++; // must exist because of valid call
-    for (int i = pos; i < cursor->size; i++)
+    for (int i = pos; i < cursor->size - 1; i++)
     {
         cursor->key[i] = cursor->key[i + 1];
     }
 
-    while (cursor->ptr[pos] != child && pos < cursor->size + 1)
+    while (pos < cursor->size + 1 && cursor->ptr[pos] != child)
         pos++; // must exist because of valid call
-    for (int i = pos; i < cursor->size + 1; i++)
+    for (int i = pos; i < cursor->size; i++)
     {
         cursor->ptr[i] = cursor->ptr[i + 1];
     }
